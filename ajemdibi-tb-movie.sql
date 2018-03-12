@@ -1,58 +1,43 @@
-USE `patraf_moviedatabase`;
+use `cicamica$db_ajemdibi`;
 
-DROP TABLE IF EXISTS `tb_movie`;
-
-CREATE TABLE IF NOT EXISTS `tb_movie` (
-  `ID` int(11) NOT NULL,
-  `TITLE_ORIGINAL` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `TITLE_ASCII` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `YEAR` varchar(4) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `GENRES` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `RATING` decimal(3,1) DEFAULT NULL,
-  `VOTES` int(11) DEFAULT NULL,
-  `COUNTRIES` varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
-  FULLTEXT KEY `index_title_ascii` (`TITLE_ASCII`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-use `db_movie`;
+alter database `cicamica$db_ajemdibi` character set utf8mb4 collate utf8mb4_unicode_ci;
 
 drop table if exists `tb_movie`;
 
 create table if not exists `tb_movie` (
-  `id`             int    ( 11)     not null primary key,
-  `title_original` varchar(200) default null,
-  `title_ascii`    varchar(200) default null,
-  `year`           varchar(  4) default null,
-  `genres`         varchar(200) default null,
-  `rating`         decimal(3,1) default null,
-  `votes`          int    ( 11) default null,
-  `countries`      varchar(200) default null,
-  index `index_title_ascii` (`title_ascii`) fulltext
+  `id`               varchar( 20)      not null primary key,
+  `title_ascii_orig` varchar(200)  default null,
+  `title_ascii`      varchar(200)  default null,
+  `year`             int    (  4)  default null,
+  `genre`            varchar(200)  default null,
+  `rating`           decimal(3,1)  default null,
+  `vote`             int    ( 11)  default null,
+  `country`          varchar(200)  default null
 );
 
 
+drop            index `idx_title_ascii`      on `tb_movie`;
+create fulltext index `idx_title_ascii`      on `tb_movie`(`title_ascii`);
+drop            index `idx_title_ascii_orig` on `tb_movie`;
+create fulltext index `idx_title_ascii_orig` on `tb_movie`(`title_ascii_orig`);
 
 
-use `patraf_databasemovie`;
+SELECT T.table_name, CCSA.character_set_name
+FROM   information_schema.`TABLES` T,
+       information_schema.`COLLATION_CHARACTER_SET_APPLICABILITY` CCSA
+WHERE CCSA.collation_name = T.table_collation
+  AND T.table_schema = 'cicamica$db_ajemdibi'
+--  AND T.table_name = 'tb_movie'
+;
 
-ALTER DATABASE `patraf_databasemovie` CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
-drop table if exists `tb_movie_2`;
+SELECT table_name, column_name, character_set_name, collation_name
+FROM information_schema.`COLUMNS` 
+WHERE table_schema = 'cicamica$db_ajemdibi'
+--  AND table_name = "tablename"
+--  AND column_name = "columnname"
+;
 
-create table if not exists `tb_movie_2` (
-  `id`             varchar( 20) collate utf8_unicode_ci     not null primary key,
-  `title_original` varchar(200) collate utf8_unicode_ci default null,
-  `title_ascii`    varchar(200) collate utf8_unicode_ci default null,
-  `year`           varchar(  4) collate utf8_unicode_ci default null,
-  `genres`         varchar(200) collate utf8_unicode_ci default null,
-  `rating`         decimal(3,1) default null,
-  `votes`          int    ( 11) default null,
-  `countries`      varchar(200) collate utf8_unicode_ci default null
-);
 
-alter table  `tb_movie_2` default character set utf8 collate utf8_unicode_ci;
 
-drop            index `index_title_ascii` on `tb_movie_2`;
-create fulltext index `index_title_ascii` on `tb_movie_2`(`title_ascii`);
+
