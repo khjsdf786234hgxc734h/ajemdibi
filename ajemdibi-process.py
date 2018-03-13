@@ -1,8 +1,8 @@
 #!/bin/env python3
 import ajemdibi_process_utility as iii
 
-file_movies  = 'imdb.title.basics.tsv.gz'
-file_ratings = 'imdb.title.ratings.tsv.gz'
+file_movies  = 'title.basics.tsv.gz'
+file_ratings = 'title.ratings.tsv.gz'
 
 list_movies_out  = []
 list_ratings_out = []
@@ -42,7 +42,7 @@ for i, line in enumerate(list_ratings):
 
 
 
-with open('imdb.ratings.out.txt', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi.ratings.out.txt', mode = 'wt', encoding = 'utf_8') as f:
     f.writelines('\n'.join(list_ratings_out))
 
 list_ratings_out = []
@@ -68,7 +68,7 @@ for i, line in enumerate(list_movies):
         list_movies_out.append(movie_id + '|' + movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres)
         dict_movies           [movie_id] =      movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres
 
-with open('imdb.movies.out.txt', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi.movies.out.txt', mode = 'wt', encoding = 'utf_8') as f:
     f.writelines('\n'.join(list_movies_out))
 
 list_movies_out = []
@@ -89,7 +89,7 @@ for key in dict_ratings:
 
 
 iii.f_print('File write started')
-with open('imdb.movies.final.out.sql', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi.movies.final.out.sql', mode = 'wt', encoding = 'utf_8') as f:
     for key, value in dict_out.items():
 
         rating, vote, movie_type, title_ascii, title_original, year, genres = value.split('|')
@@ -109,5 +109,3 @@ with open('imdb.movies.final.out.sql', mode = 'wt', encoding = 'utf_8') as f:
         f.write(sql + '\n')
 
 iii.f_print('File write finished')
-
-
