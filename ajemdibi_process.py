@@ -1,8 +1,13 @@
 #!/bin/env python3
 import ajemdibi_process_utility as iii
+import shutil
+import urllib.request
 
-file_movies  = 'title.basics.tsv.gz'
-file_ratings = 'title.ratings.tsv.gz'
+file_movies  = 'ajemdibi_movies_tsv.gz'
+file_ratings = 'ajemdibi_ratings_tsv.gz'
+
+url_movies   = 'https://datasets.imdbws.com/title.basics.tsv.gz'
+url_ratings  = 'https://datasets.imdbws.com/title.ratings.tsv.gz'
 
 list_movies_out  = []
 list_ratings_out = []
@@ -10,6 +15,21 @@ list_ratings_out = []
 dict_movies      = {}
 dict_ratings     = {}
 dict_out         = {}
+
+
+
+iii.f_print('--------')
+iii.f_print('Movies file download started')
+#f = open(file_name, 'bw')
+with urllib.request.urlopen(url_movies) as response, open(file_movies, 'wb') as f:
+    shutil.copyfileobj(response, f)
+#f.close()
+
+iii.f_print('Ratings file download started')
+with urllib.request.urlopen(url_ratings) as response, open(file_ratings, 'wb') as f:
+    shutil.copyfileobj(response, f)
+
+
 
 iii.f_print('Ratings file read started')
 list_ratings = iii.f_read_gzip_file(file_ratings)
@@ -42,7 +62,7 @@ for i, line in enumerate(list_ratings):
 
 
 
-with open('ajemdibi.ratings.out.txt', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi_ratings_out.txt', mode = 'wt', encoding = 'utf_8') as f:
     f.writelines('\n'.join(list_ratings_out))
 
 list_ratings_out = []
@@ -68,7 +88,7 @@ for i, line in enumerate(list_movies):
         list_movies_out.append(movie_id + '|' + movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres)
         dict_movies           [movie_id] =      movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres
 
-with open('ajemdibi.movies.out.txt', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi_movies_out.txt', mode = 'wt', encoding = 'utf_8') as f:
     f.writelines('\n'.join(list_movies_out))
 
 list_movies_out = []
@@ -89,7 +109,7 @@ for key in dict_ratings:
 
 
 iii.f_print('File write started')
-with open('ajemdibi.movies.final.out.sql', mode = 'wt', encoding = 'utf_8') as f:
+with open('ajemdibi_movies_final_out.sql', mode = 'wt', encoding = 'utf_8') as f:
     for key, value in dict_out.items():
 
         rating, vote, movie_type, title_ascii, title_original, year, genres = value.split('|')
