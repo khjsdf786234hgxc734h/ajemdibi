@@ -1,6 +1,7 @@
-# *.gz files
+# *.gz *.txt *.sql files
 *.gz
-
+*.txt
+*.sql
 # password files
 *password*
 
