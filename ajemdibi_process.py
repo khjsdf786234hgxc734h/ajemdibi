@@ -19,17 +19,22 @@ dict_out         = {}
 
 
 iii.f_print('--------')
+
 iii.f_print('Movies file download started')
 #f = open(file_name, 'bw')
 with urllib.request.urlopen(url_movies) as response, open(file_movies, 'wb') as f:
     shutil.copyfileobj(response, f)
 #f.close()
+iii.f_print('Movies file download finished')
+
+iii.f_print('---------')
 
 iii.f_print('Ratings file download started')
 with urllib.request.urlopen(url_ratings) as response, open(file_ratings, 'wb') as f:
     shutil.copyfileobj(response, f)
+iii.f_print('Ratings file download finished')
 
-
+iii.f_print('---------')
 
 iii.f_print('Ratings file read started')
 list_ratings = iii.f_read_gzip_file(file_ratings)
@@ -41,9 +46,6 @@ iii.f_print('--------')
 iii.f_print('Movies file read started')
 list_movies = iii.f_read_gzip_file(file_movies)
 iii.f_print('Movies file read finished')
-
-
-
 
 
 iii.f_print('--------')
@@ -59,15 +61,10 @@ for i, line in enumerate(list_ratings):
             list_ratings_out.append(movie_id + '|' + rating + '|' + vote)
             dict_ratings[movie_id] = rating + '|' + vote
 
-
-
-
 with open('ajemdibi_ratings_out.txt', mode = 'wt', encoding = 'utf_8') as f:
     f.writelines('\n'.join(list_ratings_out))
 
 list_ratings_out = []
-
-
 iii.f_print('Ratings process finished')
 
 
@@ -114,11 +111,11 @@ with open('ajemdibi_movies_final_out.sql', mode = 'wt', encoding = 'utf_8') as f
 
         rating, vote, movie_type, title_ascii, title_original, year, genres = value.split('|')
         sql = ''
-        sql = 'insert into `tb_movie_2`(`id`,`title_original`,`title_ascii`,`year`,`genres`,`rating`,`votes`,`countries`) values ('+\
+        sql = 'insert into `tb_movie`(`id`,`title_original`,`title_ascii`,`year`,`genres`,`rating`,`votes`,`countries`) values ('+\
         "'" + key + "', " +\
         "'" + title_original.replace("'", "''") + "', " +\
         "'" + title_ascii.replace("'", "''") + "', " +\
-        "'" + year + "', " +\
+        year + ", " +\
         "'" + genres + "', " +\
         rating + ", " +\
         vote + ", " +\

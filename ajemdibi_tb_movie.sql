@@ -1,25 +1,27 @@
 use `cicamica$db_ajemdibi`;
 
-alter database `cicamica$db_ajemdibi` character set utf8mb4 collate utf8mb4_unicode_ci;
+alter database `cicamica$db_ajemdibi` character set utf8 collate utf8_unicode_ci;
 
 drop table if exists `tb_movie`;
 
 create table if not exists `tb_movie` (
-  `id`               varchar( 20)      not null primary key,
-  `title_ascii_orig` varchar(200)  default null,
-  `title_ascii`      varchar(200)  default null,
-  `year`             int    (  4)  default null,
-  `genre`            varchar(200)  default null,
-  `rating`           decimal(3,1)  default null,
-  `vote`             int    ( 11)  default null,
-  `country`          varchar(200)  default null
+    `id`                    varchar( 20)     not null primary key,
+    `title_primary`         varchar(200) default null, 
+    `title_secondary`       varchar(200) default null,
+    `title_primary_ascii`   varchar(200) default null,
+    `title_secondary_ascii` varchar(200) default null,
+    `year`                  int    (  4) default null,
+    `genre`                 varchar(200) default null,
+    `rating`                decimal(3,1) default null,
+    `vote`                  int    ( 11) default null,
+    `country`               varchar(200) default null
 );
 
 
-drop            index `idx_title_ascii`      on `tb_movie`;
-create fulltext index `idx_title_ascii`      on `tb_movie`(`title_ascii`);
-drop            index `idx_title_ascii_orig` on `tb_movie`;
-create fulltext index `idx_title_ascii_orig` on `tb_movie`(`title_ascii_orig`);
+drop            index `idx_title_primary_ascii`      on `tb_movie`;
+create fulltext index `idx_title_primary_ascii`      on `tb_movie`(`title_primary_ascii`);
+drop            index `idx_title_secondary_ascii`    on `tb_movie`;
+create fulltext index `idx_title_secondary_ascii`    on `tb_movie`(`title_secondary_ascii`);
 
 
 SELECT T.table_name, CCSA.character_set_name
