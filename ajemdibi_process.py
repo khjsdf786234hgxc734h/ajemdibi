@@ -61,8 +61,8 @@ for i, line in enumerate(list_ratings):
             list_ratings_out.append(movie_id + '|' + rating + '|' + vote)
             dict_ratings[movie_id] = rating + '|' + vote
 
-with open('ajemdibi_ratings_out.txt', mode = 'wt', encoding = 'utf_8') as f:
-    f.writelines('\n'.join(list_ratings_out))
+#with open('ajemdibi_ratings_out.txt', mode = 'wt', encoding = 'utf_8') as f:
+#    f.writelines('\n'.join(list_ratings_out))
 
 list_ratings_out = []
 iii.f_print('Ratings process finished')
@@ -85,8 +85,8 @@ for i, line in enumerate(list_movies):
         list_movies_out.append(movie_id + '|' + movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres)
         dict_movies           [movie_id] =      movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres
 
-with open('ajemdibi_movies_out.txt', mode = 'wt', encoding = 'utf_8') as f:
-    f.writelines('\n'.join(list_movies_out))
+#with open('ajemdibi_movies_out.txt', mode = 'wt', encoding = 'utf_8') as f:
+#    f.writelines('\n'.join(list_movies_out))
 
 list_movies_out = []
 
