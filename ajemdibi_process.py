@@ -80,8 +80,8 @@ for i, line in enumerate(list_movies):
     if movie_type in ('movie', 'tvMovie', 'tvSeries', 'tvMiniSeries', 'tvSpecial') and is_adult == '0':
         if start_year  == r'\N': start_year = ''
         if genres      == r'\N': genres     = ''
-        title          =  iii.f_normalize(title)
-        original_title =  iii.f_normalize(original_title)
+        #title          =  iii.f_normalize(title)
+        #original_title =  iii.f_normalize(original_title)
         list_movies_out.append(movie_id + '|' + movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres)
         dict_movies           [movie_id] =      movie_type + '|' + title + '|' + original_title + '|' + start_year + '|' + genres
 
@@ -109,14 +109,18 @@ iii.f_print('File write started')
 with open('ajemdibi_movies_final_out.sql', mode = 'wt', encoding = 'utf_8') as f:
     for key, value in dict_out.items():
 
-        rating, vote, movie_type, title_ascii, title_original, year, genres = value.split('|')
+        rating, vote, movie_type, title_primary, title_secondary, year, genre = value.split('|')
+        title_primary_ascii   = iii.f_normalize(title_primary)
+        title_secondary_ascii = iii.f_normalize(title_secondary)
         sql = ''
-        sql = 'insert into `tb_movie`(`id`,`title_original`,`title_ascii`,`year`,`genres`,`rating`,`votes`,`countries`) values ('+\
+        sql = 'insert into `tb_movie`(`id`,`title_primary`,`title_secondary`,`title_primary_ascii`,`title_secondary_ascii`,`year`,`genre`,`rating`,`vote`,`country`) values ('+\
         "'" + key + "', " +\
-        "'" + title_original.replace("'", "''") + "', " +\
-        "'" + title_ascii.replace("'", "''") + "', " +\
+        "'" + title_primary.replace("'", "''")         + "', " +\
+        "'" + title_secondary.replace("'", "''")       + "', " +\
+        "'" + title_primary_ascii.replace("'", "''")   + "', " +\
+        "'" + title_secondary_ascii.replace("'", "''") + "', " +\
         year + ", " +\
-        "'" + genres + "', " +\
+        "'" + genre + "', " +\
         rating + ", " +\
         vote + ", " +\
         "'countries');"
