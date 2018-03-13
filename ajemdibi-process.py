@@ -1,5 +1,5 @@
 #!/bin/env python3
-import imdb_process_utility as iii
+import ajemdibi_process_utility as iii
 
 file_movies  = 'imdb.title.basics.tsv.gz'
 file_ratings = 'imdb.title.ratings.tsv.gz'
