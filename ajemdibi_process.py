@@ -24,7 +24,7 @@ iii.f_print('--------')
 
 iii.f_print('Movies file download started')
 #f = open(file_name, 'bw')
-with urllib.request.urlopen(url_movies) as response, open(direcory + file_movies, 'wb') as f:
+with urllib.request.urlopen(url_movies) as response, open(directory + file_movies, 'wb') as f:
     shutil.copyfileobj(response, f)
 #f.close()
 iii.f_print('Movies file download finished')
