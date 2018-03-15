@@ -2,8 +2,9 @@
 import ajemdibi_process_utility as iii
 import shutil
 import urllib.request
+import os
 
-directory    = '~/ajemdibi/'
+directory    = os.path.expanduser('~') + '/ajemdibi/'
 
 file_movies  = 'ajemdibi_movies_tsv.gz'
 file_ratings = 'ajemdibi_ratings_tsv.gz'
