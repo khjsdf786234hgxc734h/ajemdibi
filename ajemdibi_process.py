@@ -110,6 +110,7 @@ for key in dict_ratings:
 
 iii.f_print('File write started')
 with open(directory + 'ajemdibi_movies_final_out.sql', mode = 'wt', encoding = 'utf_8') as f:
+    f.write('truncate `tb_movie`;' + '\n')
     for key, value in dict_out.items():
 
         rating, vote, movie_type, title_primary, title_secondary, year, genre = value.split('|')
@@ -131,5 +132,5 @@ with open(directory + 'ajemdibi_movies_final_out.sql', mode = 'wt', encoding = '
 
         #f.write(key + '|' + value + '\n')
         f.write(sql + '\n')
-
+    f.write('commit;' + '\n')
 iii.f_print('File write finished')
