@@ -10,5 +10,5 @@ create table if not exists `tb_country` (
 );
 
 
-drop            index `idx_country` on `tb_country`;
-create fulltext index `idx_country` on `tb_country`(`country`);
+-- drop            index `idx_country` on `tb_country`;
+-- create fulltext index `idx_country` on `tb_country`(`country`);

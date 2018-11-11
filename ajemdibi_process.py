@@ -117,7 +117,7 @@ with open(directory + file_sql_out, mode = 'wt', encoding = 'utf_8') as f:
         "'" + genre.replace(",", ", ") + "', " +\
         rating + ", " +\
         vote + ", " +\
-        "'countries');"
+        "'');"
 
 
         #f.write(key + '|' + value + '\n')
@@ -126,14 +126,39 @@ with open(directory + file_sql_out, mode = 'wt', encoding = 'utf_8') as f:
 iii.f_print('File write finished')
 ################################################################################
 iii.f_print('--------')
+iii.f_print('Country copy started - step 1')
+engine = create_engine('mysql+mysqldb://' + db_user + ':' + db_password + '@' + db_host + '/' + db_database , echo = False)
+conn = engine.connect()
+trans = conn.begin()
+sql_dml = 'truncate `tb_country`;'
+conn.execute(text(sql_dml))
+sql_dml = "insert into `tb_country` (`id`, `country`) select `id`, `country` from `tb_movie` where `country` not in ('countries', '');"
+conn.execute(text(sql_dml))
+trans.commit()
+conn.close()
+iii.f_print('Country copy finished - step 1')
+################################################################################
+iii.f_print('--------')
 iii.f_print('Database insert started')
 engine = create_engine('mysql+mysqldb://' + db_user + ':' + db_password + '@' + db_host + '/' + db_database , echo = False)
 conn = engine.connect()
 trans = conn.begin()
+sql_dml = ''
 with open(directory + file_sql_out, 'r') as f:
     for sql_dml in f:
         conn.execute(text(sql_dml))
 trans.commit()
 conn.close()
 iii.f_print('Database insert finished')
-
+################################################################################
+iii.f_print('--------')
+iii.f_print('Country copy started - step 2')
+engine = create_engine('mysql+mysqldb://' + db_user + ':' + db_password + '@' + db_host + '/' + db_database , echo = False)
+conn = engine.connect()
+trans = conn.begin()
+sql_dml = "update `tb_movie`, `tb_country` set `tb_movie`.`country` = `tb_country`.`country` where `tb_movie`.`id` = `tb_country`.`id`;"
+conn.execute(text(sql_dml))
+trans.commit()
+conn.close()
+iii.f_print('Country copy finished - step 2')
+################################################################################

@@ -3,7 +3,8 @@ from ftplib import FTP
 import gzip
 import datetime
 import unicodedata
-
+import re
+import http.client
 
 
 def f_normalize(data):
@@ -58,6 +59,30 @@ def f_is_int(num):
         return True
     except:
         return False
+
+
+def f_get_country(id):
+
+    cc = 'Country:'
+    conn = http.client.HTTPSConnection('www.imdb.com')
+    conn.request('GET', '/title/' + id + '/')
+    resp = conn.getresponse()
+    # print(resp.status, resp.reason)
+    content = resp.read().decode('utf-8') # convert 'bytes' to 'string'
+
+    if cc in content:
+        start = content.find(cc) + len(cc)
+        end = content.find('</div>', start)
+        content = content[start:end]
+        content = re.sub('\s*'        , ''   , content)
+        content = re.sub('<a\S*?>'    , ''   , content)
+        content = re.sub('<s\S*?n>'   , ', ' , content)
+        content = re.sub('</h4>|</a>' , ''   , content)
+    else:
+        content = '...'
+
+    return content
+
 
 
 if __name__ == '__main__':
