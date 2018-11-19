@@ -14,7 +14,7 @@ iii.f_print('Country process started')
 engine = create_engine('mysql+mysqldb://' + db_user + ':' + db_password + '@' + db_host + '/' + db_database , echo = False)
 conn = engine.connect()
 trans = conn.begin()
-sql = "select `id` from `tb_movie` where `genre` like '%Comedy%' and `rating` > 8 and `country` = '' order by `rating` desc, `title_primary_ascii` limit 19;"
+sql = "select `id` from `tb_movie` where (`genre` like '%Comedy%' or `genre` like '%Romance%' ) and `rating` > 7.5 and `country` = '' order by `year` desc, `rating` desc, `title_primary_ascii` limit 19;"
 result = conn.execute(text(sql))
 trans.commit()
 conn.close()
@@ -24,12 +24,14 @@ for row in result:
     # print(row[0])
     sleep(randint(16, 46))
     movie_country[row[0]] = iii.f_get_country(row[0])
+    iii.f_print(str(row[0] + ' : ' + str(movie_country[row[0]])))
 print(movie_country)
 
 stmt = text("update `tb_movie` set `country` = :cc where `id` = :ii;")
 
 iii.f_print('--------')
 
+engine = create_engine('mysql+mysqldb://' + db_user + ':' + db_password + '@' + db_host + '/' + db_database , echo = False)
 conn = engine.connect()
 trans = conn.begin()
 for id, country in movie_country.items():

@@ -1,11 +1,9 @@
 from ftplib import FTP
-#from string import maketrans
 import gzip
 import datetime
 import unicodedata
 import re
-import http.client
-
+import urllib.request
 
 def f_normalize(data):
 
@@ -63,13 +61,35 @@ def f_is_int(num):
 
 def f_get_country(id):
 
-    cc = 'Country:'
-    conn = http.client.HTTPSConnection('www.imdb.com')
-    conn.request('GET', '/title/' + id + '/')
-    resp = conn.getresponse()
-    # print(resp.status, resp.reason)
-    content = resp.read().decode('utf-8') # convert 'bytes' to 'string'
+    req = urllib.request.Request('https://www.imdb.com/title/' + id + '/')
+    # !!! do not use gzip etc.
+    # !!! you will get an error, when you want to convert to 'utf-8'
+    # req.add_header('Accept-Encoding','gzip, deflate, br')
+    req.add_header('Accept-Language','en-US,en;q=0.5')
+    req.add_header('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+    req.add_header('Cache-Control','max-age=0')
+    req.add_header('Connection','keep-alive')
+    req.add_header('DNT','1')
+    req.add_header('Host','www.imdb.com')
+    req.add_header('Referer','https://www.imdb.com/?ref_=nv_home')
+    req.add_header('Upgrade-Insecure-Requests','1')
+    req.add_header('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0')
+    #print('-------')
+    #print(req.header_items())
+    #print('-------')
+    with urllib.request.urlopen(req) as resp:
+        content = resp.read().decode('utf-8') # convert 'bytes' to 'string'
+        #print('-------')
+        #print(resp.geturl())
+        #print('-------')
+        #print(resp.info())
+        #print('-------')
+        #print(resp.status)
+        #print('-------')
+        #print(resp.reason)
+        #print('-------')
 
+    cc = 'Country:'
     if cc in content:
         start = content.find(cc) + len(cc)
         end = content.find('</div>', start)
