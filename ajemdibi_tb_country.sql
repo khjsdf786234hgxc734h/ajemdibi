@@ -1,8 +1,8 @@
-use `cicamica$db_ajemdibi`;
+use `cicamica$db_everything`;
 
-alter database `cicamica$db_ajemdibi` character set utf8 collate utf8_unicode_ci;
+--alter database `cicamica$db_everything` character set utf8 collate utf8_unicode_ci;
 
-drop table if exists `tb_country`;
+--drop table if exists `tb_country`;
 
 create table if not exists `tb_country` (
     `id`                    varchar( 20)     not null primary key,

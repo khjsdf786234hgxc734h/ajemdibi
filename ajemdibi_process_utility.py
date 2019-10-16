@@ -59,12 +59,11 @@ def f_is_int(num):
         return False
 
 
-def f_get_country(id):
-
+def f_get_html_page(id):
     req = urllib.request.Request('https://www.imdb.com/title/' + id + '/')
-    # !!! do not use gzip etc.
+    # !!! do not use 'gzip' in the header as encoding
     # !!! you will get an error, when you want to convert to 'utf-8'
-    # req.add_header('Accept-Encoding','gzip, deflate, br')
+    # !!! req.add_header('Accept-Encoding','gzip, deflate, br')
     req.add_header('Accept-Language','en-US,en;q=0.5')
     req.add_header('Accept','text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
     req.add_header('Cache-Control','max-age=0')
@@ -89,6 +88,11 @@ def f_get_country(id):
         #print(resp.reason)
         #print('-------')
 
+    return content
+
+
+def f_get_country(content):
+
     cc = 'Country:'
     if cc in content:
         start = content.find(cc) + len(cc)
@@ -103,6 +107,22 @@ def f_get_country(id):
 
     return content
 
+
+def f_get_movie_type(content):
+
+    cc = 'title="See more release dates" >'
+    if cc in content:
+        start = content.find(cc) + len(cc)
+        end = content.find('</a>', start)
+        content = content[start:end]
+        content = re.sub('([0-9]|\().*', ''   , content)
+        content = re.sub('\s*$'        , ''   , content)
+        if content == '':
+            content = 'Film'
+    else:
+        content = '...'
+
+    return content
 
 
 if __name__ == '__main__':
